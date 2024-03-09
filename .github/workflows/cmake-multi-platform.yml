@@ -38,6 +38,10 @@ jobs:
       - name: Setup msbuild
         uses: microsoft/setup-msbuild@v1
 
+      - name: Enable Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1.13.0
+            
+
       - name: Compile for Windows
         run: |
           mkdir build && cd build
