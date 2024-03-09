@@ -19,7 +19,7 @@ jobs:
       - name: Compile for Linux
         run: |
           mkdir build && cd build
-          make
+          make ..
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v2
@@ -44,7 +44,7 @@ jobs:
           vcpkg install imgui
           vcpkg install glfw3
           vcpkg integrate install
-          msbuild RMB.sln
+          msbuild ../RMB.sln
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v2
