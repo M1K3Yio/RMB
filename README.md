@@ -44,14 +44,35 @@ This is a simple learning project so, things might get broken. Since it simulate
 * [ImGui](https://github.com/ocornut/imgui) for simple or more like lazy UI.
 
 # How to Build
-* Windows: 
-  - Visual Studio 2019+ with `Desktop development with C++` components installed should be able to build this. (Yes, no need to manually link ImGui and GLFW libs).
+Output directory: `build/RMB/(Debug|Release)/(platform-x64)/RMB(.exe if windows)`
+
+* Windows:
+  - Visual Studio 2019+ with `Desktop development with C++` components installed and `vc143+` should be able to build this. (Yes, no need to manually link ImGui and GLFW libs).
+    - `cl.exe nob.c && nob` (Make sure `cl.exe` is in your `PATH` environment variable, typicall open `Developer PowerShell for VS {VERSION}` and run the commands)
+        - After running `nob` or the above command you can also directly use Visual Studio to build.
 * Linux:
   - Install libx11, mesa and libxtst libs on your Linux machine.
     - On Debian/Ubuntu based Linux distros run `sudo apt install libx11-dev mesa-common-dev libxtst-dev`.
     - On Arch Linux based Linux distros run `sudo pacman -Syu base-devel libx11 mesa libxtst`.
-  - After installing these libs simply run `make` on the directory.
+  - After installing these libs simply run `cc nob.c -o nob && nob` on the directory.
 * For other OSs/Platforms you need to implement all these stuff listed [here](#for-other-platforms). You also going to need GLFW 3.3+ lib for the corresponding platform/os.
+
+# macOS(Experimental) Build
+*After some testing with [@VladimirProg](https://github.com/VladimirProg) or @prog_11765(discord) help the build seems to be stable and the performance seems to be quit okay, so it's safe to use for now.*<br>
+<br>
+After some requests for macOS support here we are.<br>
+Haven't tested properly at all(Can't test in a real environment, don't own a mac device).<br>
+Apple's clang doesn't support c++ 20's `jthread` so came up with some weird solution so that it at least builds and checksout basic usage.<br>
+It will definately become easier and better when they decides to support it :).<br>
+The follwing steps worked on Ventura 13.0.0 should be fine till macOS 12.0 and later versions.
+  - Need [HomeBrew](https://brew.sh/)
+  - Make sure everything is fine by running `cc --version` you should see some version output. If not then [HomeBrew](https://brew.sh/) was not installed successfully, try again.
+  - `brew install gcc` - need GCC version 10+
+    - why `gcc` even after Apple stopped supporting it? Well to support c++ 20's `jthread`.
+    - (Optional) If the build fails with some header file missing then, run: `g++ --version`(this is gcc's c++ compiler), if you see some output containing `clang`(which is aliased as `g++` by default) then please [WATCH THIS VIDEO](https://youtu.be/0z-fCNNqfEg?t=168).
+  - Run: `git clone --depth=1 https://github.com/IamSanjid/RMB.git && cd RMB`
+  - Run: `cc -o nob nob.c && ./nob` should succeed with some compiler warnings most of them are safe to ignore.
+  - Confirm by running `build/RMB/Release/macos-x64/RMB`, it will ask for accessibility permissions allow those from System Preference.
 
 # For Other Platforms
 1. First you need to implement a global hotkey listener, for windows, a dummy window is created and `RegisterHotKey` API is used to register the hotkeys for that window and listened to `WM_HOTKEY` messages on that window. `XGrabKey` is used for X11 window manager.
